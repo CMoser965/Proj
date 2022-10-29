@@ -38,13 +38,16 @@ module adder
     assign magA[N-(N/4)-1] = 1'b1;
     assign magB[N-(N/4)-1] = 1'b1;
     assign magA[N-(N/4)-2:0] = A[N-(N/4)-1:0];
-    assign magB[N-(N/4)-2:0] = B[N-(N/4)-1:0];
+    assign magB[N-(N/4)-2:0] = B[N-(N/4)-1:0];   
 
-    shiftreg cmpshift(expA, expB, signA, signB, magA, magB, clk, expOp1, expOp2, magOp1, magOp2, signSum, signOp1, signOp2);
-    fadd ALU(magA, magB, signOp1, signOp2, signSum, expOp1, clk, magHold, expOp1Hold, expOp2, signOp2);
-    normalizer(magHold, signOp2, )
+    shiftreg compare(expA, expB, expOp1, expOp2, clk, 
+                    signA, signB, signSum, magA, magB, 
+                    expOp1, expOp2, magOp1, magOp2);
+
     
 
+
+    assign out = {1'b0, expSum, magSum[(N-(N/4)-2):0]}
 
 endmodule
 
