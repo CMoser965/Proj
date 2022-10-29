@@ -44,30 +44,17 @@ module adder
                     signA, signB, signSum, magA, magB, 
                     expOp1, expOp2, magOp1, magOp2);
 
-    
+    always @(posedge clk) begin 
+        magSum = magA + magB;
+    end
 
 
-    assign out = {1'b0, expSum, magSum[(N-(N/4)-2):0]}
+    normalizer form(magHold, signA, signB, signSum, 
+                    signOp1, signOp2, clk, expOp1,
+                    magOp1, magOp2, magSum);
 
-endmodule
+    assign out = {signSum, expSum, magSum[(N-(N/4)-2):0]};
 
-module minALU()
-
-module fadd(a,b,s1,s2,sn,ex1,clk,out,ex2,sn3,sn4,sr1); //submodule for addition
-input [23:0]a,b;
-input[7:0]ex1;
-input s1,s2,clk,sn;
-output reg [7:0]ex2;
-output reg[24:0]out;
-output reg sn3,sn4,sr1;
-always@(posedge clk)
-begin
-ex2=ex1;
-sr1=sn;
-sn3=s1;
-sn4=s2;
-out=a+b;
-end
 endmodule
 
 module shiftreg(
