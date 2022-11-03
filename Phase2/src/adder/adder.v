@@ -1,102 +1,130 @@
-module fpadd(a,b,clk,out);
-input[31:0]a,b;
-input clk;
-output [31:0]out;
-wire [7:0]e1,e2,ex,ey,exy,ex1;
-wire s1,s2,s,s3,sr,sn,sx1,sx2,sy1,sn3,sn4,sr1;
-wire [23:0]m1,m2,mx,my,mxy;
-wire [24:0]mxy1;
-assign s1=a[31];
-assign s2=b[31];
-assign e1=a[30:23];
-assign e2=b[30:23];
-assign m1[23]=1'b1;
-assign m2[23]=1'b1;
-assign m1[22:0]=a[22:0];
-assign m2[22:0]=b[22:0];
-//submodule for compare and shfit
-cmpshift as(e1[7:0],e2[7:0],s1,s2,m1[23:0],m2[23:0],clk,ex,ey,mx,my,s,sx1,sy1);
-//sub module for mantissa addition
-fadd as1(mx,my,sx1,sx2,s,ex,clk,mxy1,ex1,sn3,sn4,sr1);
-//sub module for normalization
-normalized as2(mxy1,sr1,sn3,sn4,s3,clk,ex1,exy,mxy);
-assign out={1'b0,exy,mxy[22:0]};
-endmodule
-module normalized(mxy1,s,s1,s2,s3,clk,ex,exy,mxy);
-input[24:0]mxy1;
-input s,s1,s2,s3,clk;
-input[7:0]ex;
-output reg[7:0]exy;
-output reg[23:0]mxy;
-always@(posedge clk)
-begin
+/*
+Author: Christian Moser
+Date: 10-28-2022
+Description: Full-Precision (N-bit) floating point adder implementation
 
-mxy=mxy1[24:1];
-exy=ex;
-repeat(24)
-begin
-if(mxy[23]==1'b0)
-begin
-mxy=mxy<<1'b1;
-exy=exy-8'b1;
-end
-end
-end
+example of 32-bit single precision float:
+1   11111111    11111111111111111111111
+S   E           M
+S = 0 | 1 implies positive (0) or negative (1)
+E = 1111 1111 equivalent to whole number component
+M = 1111 1111 1111 1111 1111 111 equivalent to decimal component
+*/
+
+module adder
+    #(parameter N=32)
+    (input   wire[N-1:0] A,
+    input   wire[N-1:0] B,
+    input  clk,
+    output   wire[N-1:0] Sum
+    );
+    //def wires
+    wire    [(N/4)-1:0]     expA, expB, expX, expY, expSum, shifting, expTemp; // N = 32; N/4 - 1 = 7:0
+    wire    signX, signY, signA, signB, swap, sign, needShift, overflow;                                           // single bit
+    wire    [N-(N/4)-2:0]     magA, magB, magX, magY, magSum, magFinal;           // N = 32; N - (N/4) - 2 = 22:0
+    // wire    [N-(N/4) - 1:0]     magYShifted;                                        // N = 32; N - (N/4) = 24:0
+    reg     [N - (N/4) - 2: 0]  magTemp;
+    reg     [(N/4) - 1: 0]      shiftedExp;
+    reg     [N - (N/4) - 1: 0]  shiftedMag;
+
+    //initial assignments
+    assign signA = A[N-1];                                                  // sign bit A
+    assign signB = B[N-1];                                                  // sign bit B
+
+    assign signX = swap ? signA : signB;
+    assign signY = swap ? signB : signA;
+    
+    assign expA = A[N-2 : N - (N/4) - 1];                                   // exponent_A = A[30:32-8-1] = A[30:23]
+    assign expB = B[N-2 : N - (N/4) - 1];                                   // exponent_B = B[30:32-8-1] = B[30:23]
+    
+    assign swap = (expA > expB) | (signA < signB) ? 1'b1 : 1'b0;
+
+    assign expX = swap ? expA : expB;
+    assign expY = swap ? expB : expA;
+
+    FA #(.N((N/4))) exponentAdder(
+        .A(expX[N/4 - 1: 0]), .B(expY[N/4 - 1: 0]),
+        .S(expTemp), .CN(sign)
+    );
+    
+    assign magA[N-(N/4) - 2:0] = A[N-(N/4) - 2:0];                              // mantissa_A[32-8-2=22:0] = A[22:0]
+    assign magB[N-(N/4) - 2:0] = B[N-(N/4) - 2:0];                              // mantissa_A[32-8-2=22:0] = A[22:0]
+
+    assign needShift = |(expX - expY) ? 1'b1 : 1'b0;
+    assign shifting = expX - expY;
+    assign magX = swap ? magA : magB;
+    assign magY = swap ? magB : magA;
+    
+    always @(*) begin
+        shiftedMag =  {1'b1, magY};
+        shiftedExp = expX;
+        if(needShift) begin
+            repeat (shifting - (1)) begin
+                shiftedMag = shiftedMag >> 1'b1;
+            end
+        end else begin
+            shiftedMag = shiftedMag << 1'b1;
+            shiftedExp[(N/4) - 2: 0] = shiftedExp[(N/4) - 2: 0] + 1'b1;
+        end
+    end
+
+    assign expSum = shiftedExp;
+    
+
+    FA #(.N(N-(N/4) - 1 )) additive(
+        .A(magX),       .B(shiftedMag[N - (N/4) - 1 : 1]),
+        .S(magSum),     .CN(overflow)
+    );
+    always @(*) begin
+        magTemp = magSum;
+        if(overflow) begin
+                magTemp = (magSum >> 1);
+        end
+        if(sign & overflow) begin 
+                shiftedExp[(N/4) - 2: 0] = shiftedExp[(N/4) - 2: 0] << 1;
+            end
+    end
+    
+    assign magFinal = (sign & overflow) | expA == expB ? magSum >> 1 : magSum;
+    
+    assign Sum = {signX, expSum, magFinal};
+
 endmodule
 
-module fadd(a,b,s1,s2,sn,ex1,clk,out,ex2,sn3,sn4,sr1); //submodule for addition
-input [23:0]a,b;
-input[7:0]ex1;
-input s1,s2,clk,sn;
-output reg [7:0]ex2;
-output reg[24:0]out;
-output reg sn3,sn4,sr1;
-always@(posedge clk)
-begin
-ex2=ex1;
-sr1=sn;
-sn3=s1;
-sn4=s2;
-out=a+b;
-end
+module FA #(parameter N = 32) (
+    input wire[N-1:0] A,
+    input wire[N-1:0] B,
+    output wire[N-1:0] S,
+    output wire CN
+);
+
+    wire [N:0] sum;
+    wire [N-2:0] carrier;
+    wire [N-1:0] FAResult;
+
+    Cell rippleCarry [N-1:0] (
+        .A(A),
+        .B(B),
+        .Cin({carrier, 1'b0}),
+        .Sum(FAResult),
+        .Cout({CN, carrier})
+    ); 
+
+    assign sum = {CN, FAResult};
+
+    assign S = FAResult;
+
 endmodule
-module cmpshift(e1,e2,s1,s2,m1,m2,clk,ex,ey,mx,my,s,sx1,sy1); //module for compare &shift
-input [7:0]e1,e2;
-input [23:0]m1,m2;
-input clk,s1,s2;
-output reg[7:0]ex,ey;
-output reg[23:0]mx,my;
-output reg s,sx1,sy1;
-reg [7:0]diff;
-always@(posedge clk)
-begin
-sx1=s1;
-sy1=s2;
-if(e1==e2)
-begin
-ex=e1+8'b1;
-ey=e2+8'b1;
-mx=m1;
-my=m2;
-s=1'b1;
-end
-else if(e1>e2)
-begin
-diff=e1-e2;
-ex=e1+8'b1;
-ey=e1+8'b1;
-mx=m1;
-my=m2>>diff;
-s=1'b1;
-end
-else
-begin
-diff=e2-e1;
-ex=e2+8'b1;
-ey=e2+8'b1;
-mx=m2;
-my=m1>>diff;
-s=1'b0;
-end
-end
+
+module Cell (
+    input A,
+    input B,
+    input Cin,
+    output Sum,
+    output Cout
+);
+
+    assign Sum = A ^ B ^ Cin;
+    assign Cout = (A & B) | (B & Cin) | (A & Cin); 
+
 endmodule

@@ -1,0 +1,12 @@
+Wed Nov 02 11:47:47 CDT 2022
+Trace back: Macro Break
+    while executing
+"macroMark"
+    (procedure "update" line 6)
+    invoked from within
+"update"
+    (procedure "Wave::DragMotion" line 7)
+    invoked from within
+"Wave::DragMotion 13 .main_pane.wave.interior.cs.body.pw.wf.grid.row0,wave.data 326 12 1073 214"
+  <2:C:/modeltech64_10.7f/win64/tk8.6/bgerror.tcl:106: ::tkerror {Macro Break}
+  <1:eval:1: ::tk::dialog::error::bgerror {Macro Break}

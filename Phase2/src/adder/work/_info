@@ -1,0 +1,155 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/mathm/OneDrive/_Fall22/4303_Digi_IC/Proj/Phase2/src/adder
+T_opt
+!s110 1667234750
+VQ^64nF?K=l<a7_8=ibeBT0
+Z1 04 8 4 work stimulus fast 0
+=1-bc83851ab186-635ffbbe-f-3b84
+Z2 o-quiet -auto_acc_if_foreign -work work +acc
+Z3 tCvgOpt 0
+n@_opt
+Z4 OL;O;10.7f;67
+R0
+T_opt1
+!s110 1667249376
+V8V7<m@48CB^X<P6cn61P:0
+R1
+=1-d45d6450d47a-636034e0-b0-4ae0
+R2
+R3
+n@_opt1
+R4
+R0
+T_opt2
+!s110 1667407690
+VXLbfUUX<e90P^i:gC>VYS0
+R1
+=1-bc83851ab186-63629f4a-ff-ed0
+R2
+R3
+n@_opt2
+R4
+R0
+T_opt3
+!s110 1667409669
+Vom0=3C7V4;5V8`S89]EHl3
+R1
+=1-bc83851ab186-6362a705-100-2f24
+R2
+R3
+n@_opt3
+R4
+R0
+T_opt4
+!s110 1667454475
+VK?^V8TZiAFIY?Hoc0Hica0
+R1
+=1-d45d6450d47a-6363560b-210-46e8
+R2
+R3
+n@_opt4
+R4
+R0
+T_opt5
+!s110 1667485381
+VW[UGnW:0no=1F6ce:<z[Q3
+R1
+=1-d45d6450d47a-6363cec5-b7-9f8
+R2
+R3
+n@_opt5
+R4
+vadder
+Z5 !s110 1667485380
+!i10b 1
+!s100 ejd@7N:=IDWN6Y60O@8I>1
+IRAe1>hZ_]ShGbX2B?cDBX0
+Z6 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z7 w1667485289
+Z8 8adder.v
+Z9 Fadder.v
+L0 14
+Z10 OL;L;10.7f;67
+r1
+!s85 0
+31
+Z11 !s108 1667485380.000000
+Z12 !s107 adder.v|adder_tb.v|
+Z13 !s90 -reportprogress|300|adder_tb.v|adder.v|
+!i113 0
+Z14 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R3
+vCell
+R5
+!i10b 1
+!s100 kn]GUe;P[bgK`6SzWCkkc2
+IgiNoZmPE:mk`O9YAKeEAl1
+R6
+R0
+R7
+R8
+R9
+L0 119
+R10
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 0
+R14
+R3
+n@cell
+vFA
+R5
+!i10b 1
+!s100 IH_7e6Qi^XQNJ1OTE3H3_3
+IlUBnM^hO^PmLMTX@lC>J50
+R6
+R0
+R7
+R8
+R9
+L0 94
+R10
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 0
+R14
+R3
+n@f@a
+vstimulus
+R5
+!i10b 1
+!s100 >C4UZNXASOaGagDCle5c;3
+Idc:@cEWWmD9NdI_h3K^?60
+R6
+R0
+w1667485361
+8adder_tb.v
+Fadder_tb.v
+L0 1
+R10
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 0
+R14
+R3
