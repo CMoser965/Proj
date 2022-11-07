@@ -15,7 +15,6 @@ module adder
     #(parameter N=32)
     (input   wire[N-1:0] A,
     input   wire[N-1:0] B,
-    input  clk,
     output   wire[N-1:0] Sum
     );
     //def wires

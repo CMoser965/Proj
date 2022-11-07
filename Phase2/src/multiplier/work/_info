@@ -9,34 +9,78 @@ z2
 cModel Technology
 Z0 dC:/Users/mathm/OneDrive/_Fall22/4303_Digi_IC/Proj/Phase2/src/multiplier
 T_opt
-!s110 1667046486
-VaTj^HohbzP<:VdJXdLcgB1
+!s110 1667787462
+V`ZZT6UX6PF@4UaPn8VbO63
 04 8 4 work stimulus fast 0
-=1-d45d6450d47a-635d1c56-fe-15e0
+=1-d45d6450d47a-63686ac6-236-b848
 o-quiet -auto_acc_if_foreign -work work +acc
 Z1 tCvgOpt 0
 n@_opt
 OL;O;10.7f;67
-vmultiplier
-Z2 !s110 1667046485
+vCell
+Z2 !s110 1667787461
 !i10b 1
-!s100 nX`>PFjC=n<8PhYPI[nzz1
-I6V4lTH4Phkma86FGzAV`A3
+!s100 PhY39i]]E=g45L>j5WjES0
+I2V]<jXB1dSI_FE>:kMf6E3
 Z3 VDg1SIo80bB@j0V0VzS_@n1
 R0
-w1667046426
-8multiplier.v
-Fmultiplier.v
-L0 9
-Z4 OL;L;10.7f;67
+Z4 w1667787441
+Z5 8multiplier.v
+Z6 Fmultiplier.v
+L0 93
+Z7 OL;L;10.7f;67
 r1
 !s85 0
 31
-Z5 !s108 1667046485.000000
-Z6 !s107 multiplier.v|multiplier_tb.v|
-Z7 !s90 -reportprogress|300|multiplier_tb.v|multiplier.v|
+Z8 !s108 1667787461.000000
+Z9 !s107 multiplier.v|multiplier_tb.v|
+Z10 !s90 -reportprogress|300|multiplier_tb.v|multiplier.v|
 !i113 0
-Z8 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z11 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R1
+n@cell
+vFA
+R2
+!i10b 1
+!s100 f@>k7XmOnIZlABZA;_l[^0
+IGUeAeelZ`Zd[hCSZE6nW40
+R3
+R0
+R4
+R5
+R6
+L0 68
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 0
+R11
+R1
+n@f@a
+vmultiplier
+R2
+!i10b 1
+!s100 <:E]@81Gf4][2bUYHkK^b3
+I^Z[Y1M;M_KURJLAgejWna3
+R3
+R0
+R4
+R5
+R6
+L0 9
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 0
+R11
 R1
 vstimulus
 R2
@@ -49,13 +93,13 @@ w1667046460
 8multiplier_tb.v
 Fmultiplier_tb.v
 L0 1
-R4
+R7
 r1
 !s85 0
 31
-R5
-R6
-R7
-!i113 0
 R8
+R9
+R10
+!i113 0
+R11
 R1
