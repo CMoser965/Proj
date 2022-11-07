@@ -13,7 +13,7 @@
 # //
 # do {.\multiplier.do}
 # Model Technology ModelSim SE-64 vlog 10.7f Compiler 2020.03 Mar 24 2020
-# Start time: 20:17:41 on Nov 06,2022
+# Start time: 23:02:30 on Nov 06,2022
 # vlog -reportprogress 300 multiplier_tb.v multiplier.v 
 # -- Compiling module stimulus
 # -- Compiling module multiplier
@@ -22,40 +22,36 @@
 # 
 # Top level modules:
 # 	stimulus
-# End time: 20:17:41 on Nov 06,2022, Elapsed time: 0:00:00
+# End time: 23:02:30 on Nov 06,2022, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vsim -voptargs="+acc" work.stimulus 
-# Start time: 20:17:41 on Nov 06,2022
+# Start time: 23:02:30 on Nov 06,2022
 # ** Note: (vsim-3812) Design is being optimized...
 # Loading work.stimulus(fast)
 # Loading work.multiplier(fast)
 # Loading work.FA(fast)
 # Loading work.Cell(fast)
 # .main_pane.wave.interior.cs.body.pw.wf
-# Failed : Expected_result = 00000000, Result = 44800000, 
-#  Expected_Exception = 0, Exception = 0,
-#  Expected_Overflow = 0, Overflow = 0, 
-#  Expected_Underflow = 0, Underflow = 0 -          13 
-#  
+# Success :          13
 # Failed : Expected_result = 453210e9, Result = 453210ea, 
 #  Expected_Exception = 0, Exception = 0,
 #  Expected_Overflow = 0, Overflow = 0, 
-#  Expected_Underflow = 0, Underflow = 1 -          15 
+#  Expected_Underflow = 0, Underflow = 0 -          15 
 #  
 # Failed : Expected_result = c2355062, Result = c2355063, 
 #  Expected_Exception = 0, Exception = 0,
 #  Expected_Overflow = 0, Overflow = 0, 
-#  Expected_Underflow = 0, Underflow = 1 -          17 
+#  Expected_Underflow = 0, Underflow = 0 -          17 
 #  
 # Failed : Expected_result = 441e5375, Result = 441e5374, 
 #  Expected_Exception = 0, Exception = 0,
 #  Expected_Overflow = 0, Overflow = 0, 
-#  Expected_Underflow = 0, Underflow = 1 -          19 
+#  Expected_Underflow = 0, Underflow = 0 -          19 
 #  
-# Failed : Expected_result = 4b800000, Result = 4b800000, 
+# Failed : Expected_result = 4b800000, Result = 4bc00000, 
 #  Expected_Exception = 0, Exception = 0,
 #  Expected_Overflow = 0, Overflow = 0, 
-#  Expected_Underflow = 0, Underflow = 1 -          21 
+#  Expected_Underflow = 0, Underflow = 0 -          21 
 #  
 # Failed : Expected_result = 361fffe7, Result = 361fffff, 
 #  Expected_Exception = 0, Exception = 0,
@@ -63,7 +59,7 @@
 #  Expected_Underflow = 0, Underflow = 0 -          23 
 #  
 # Success :          25
-# Failed : Expected_result = 441e5375, Result = 00000000, 
+# Failed : Expected_result = 441e5375, Result = 80000000, 
 #  Expected_Exception = 0, Exception = 0,
 #  Expected_Overflow = 0, Overflow = 0, 
 #  Expected_Underflow = 0, Underflow = 0 -          27 
@@ -72,5 +68,5 @@
 # ** Note: $stop    : multiplier_tb.v(31)
 #    Time: 90 ns  Iteration: 1  Instance: /stimulus
 # Break in Module stimulus at multiplier_tb.v line 31
-# End time: 20:19:43 on Nov 06,2022, Elapsed time: 0:02:02
+# End time: 23:04:22 on Nov 06,2022, Elapsed time: 0:01:52
 # Errors: 0, Warnings: 0

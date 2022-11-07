@@ -16,52 +16,47 @@ module multiplier
 );
 
 //def wires
-wire    sign, signA, signB, isNormal, round, expSumOverflown;
+wire    sign, signA, signB, isNormal, round, expSumCarry, expSumCarryNorm;
 wire    [7:0]   expA, expB, expProd, expSum;
 wire    [22:0]  magA, magB, magProd;
+wire    [47:0]  magTemp, normalTemp;
 
-reg     [47:0]  magTemp, normalTemp;
-reg     [7:0]   expTemp;
 
 assign expA = A[30:23];
 assign expB = B[30:23];
-
 assign magA = A[22:0];
 assign magB = B[22:0];
-
 assign signA = A[31];
 assign signB = B[31];
 assign sign = signA ^ signB;
 
 FA #(.N(8)) expadder (
     .A(expA), .B(expB),
-    .S(expSum), .CN(expSumOverflown)
+    .S(expSum), .CN(expSumCarry)
 );
 
 assign isNormal   =    magTemp[47] ? 1'b1 : 1'b0;
 assign round      =    |normalTemp[22:0];
 
-always @(*) begin
+FA #(.N(8)) expaddernorm (
+    .A(expSum), .B(8'b10000001 + isNormal),
+    .S(expProd), .CN(expSumCarryNorm)
+);
 
-    magTemp    =    {(|expA) ? 1'b1 : 1'b0, magA} * {(|expB) ? 1'b1 : 1'b0, magB};
-    normalTemp =    isNormal ? magTemp : magTemp << 1;
-    expTemp    =    expSum - 8'd127 + isNormal;     // bias of 127
-
-end
-
-assign expProd = expTemp;
-assign magProd = normalTemp[46:24] + (normalTemp[23] & round);
+assign magTemp    =    {(|expA) ? 1'b1 : 1'b0, magA} * {(|expB) ? 1'b1 : 1'b0, magB};
+assign normalTemp =    isNormal ? magTemp : magTemp << isNormal;
+assign magProd    =    normalTemp[46:24] + (normalTemp[23] & round);
 
 assign exception =  (&expA) | (&expB);
-assign zero      =  exception ? 1'b0 : (normalTemp == 23'b0);
-assign overflow  =  ((expSumOverflown & !expProd[7]) & !zero);
-assign underflow =  ((expSumOverflown & expProd[7]) & !zero);
+assign zero      =  exception ? 1'b0 : ({isNormal, magProd[21:0]} == 23'b0) & ~expSumCarry;
+assign overflow  =  ((expSumCarry & !expProd[7]) & !zero);
+assign underflow =  ((expSumCarryNorm & expProd[7]) & !zero);
 
-// assign prod = exception ? 32'd0 : { zero ? sign : overflow, zero ? expProd : underflow, zero ? magProd : 23'd0};
-assign prod = exception ? 32'd0                 : 
-              zero      ? {sign, 32'd0}         :
-              overflow  ? {sign, 8'hFF, 23'd0}  :
-              {sign, expProd, magProd};
+assign prod = exception ? 32'd0                   : 
+              zero      ? {sign, 31'd0}           :
+              overflow  ? {sign, 8'hFF, 23'd0}    :
+              underflow ? {sign, 31'd0}           :
+                          {sign, expProd, magProd};
 
 endmodule
 
